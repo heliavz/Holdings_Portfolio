@@ -6,7 +6,7 @@ function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <div className="h-screen">
+    <div className="z-20 relative h-screen">
       {collapsed ? (
         <SidebarCollapsed onExpand={() => setCollapsed(false)} />
       ) : (
