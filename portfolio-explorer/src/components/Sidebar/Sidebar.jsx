@@ -2,7 +2,7 @@ import { useState } from "react";
 import SidebarExpanded from "./SidebarExpanded";
 import SidebarCollapsed from "./SidebarCollapsed";
 
-function Sidebar() {
+function Sidebar({ showTree, setShowTree }) {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
@@ -10,7 +10,11 @@ function Sidebar() {
       {collapsed ? (
         <SidebarCollapsed onExpand={() => setCollapsed(false)} />
       ) : (
-        <SidebarExpanded onCollapse={() => setCollapsed(true)} />
+        <SidebarExpanded
+          onCollapse={() => setCollapsed(true)}
+          showTree={showTree}
+          setShowTree={setShowTree}
+        />
       )}
     </div>
   );

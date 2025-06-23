@@ -47,7 +47,7 @@ function TreeViewPanel({ onClose }) {
   };
 
   return (
-    <aside className="w-[361px] h-screen bg-card-bg overflow-y-auto px-4 pt-10 z-10 relative shadow-[2px_0_16px_rgba(0,0,0,0.25)]">
+    <aside className="w-[361px] h-screen bg-card-bg overflow-y-auto px-4 pt-10 z-10 relative shadow-[2px_0_16px_rgba(0,0,0,0.25)] hidden lg:block">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-[24px] font-semibold text-text ml-4">Portfolio</h2>
@@ -108,7 +108,7 @@ function TreeViewPanel({ onClose }) {
 
         {/* Button */}
         <div className="flex justify-center mt-16">
-          <button className="w-[100%] h-[56px] rounded-[32px] bg-focus text-primary cursor-pointer text-[20px] font-medium shadow-[0_2px_16px_rgba(0,0,0,0.25)]">
+          <button className="w-[100%] h-[56px] rounded-[32px] bg-focus text-primary cursor-pointer text-[20px] font-medium shadow-[0_2px_16px_rgba(0,0,0,0.25)] hover:bg-primary hover:text-white transition-all duration-200">
             Add More
           </button>
         </div>
