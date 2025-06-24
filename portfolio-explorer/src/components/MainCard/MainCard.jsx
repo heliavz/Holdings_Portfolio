@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import HoldingIcon from "../../assets/Holding.png";
 import FolderIcon from "../../assets/Folder.png";
 import FileIcon from "../../assets/File.png";
@@ -29,9 +31,8 @@ function MainCard({ node }) {
     industry,
     owner,
     jurisdiction,
-    location,
-    createdAt,
-    modifiedAt,
+    created_at,
+    last_modified,
     children = [],
     type,
   } = node;
@@ -39,26 +40,32 @@ function MainCard({ node }) {
   const entities = children.filter((c) => c.type === "entity");
   const investments = children.filter((c) => c.type === "investment");
 
-  // Recursively collect all descendant files
-  const collectAllFiles = (n) => {
+  const [toast, setToast] = useState(null);
+
+  const showToast = (message) => {
+    setToast(message);
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  const collectAllFiles = (n, parent = null) => {
     let files = [];
     if (n.children) {
       for (const child of n.children) {
         if (child.type === "file") {
-          files.push(child);
+          files.push({ ...child, directoryNode: parent });
         }
         if (child.children) {
-          files = [...files, ...collectAllFiles(child)];
+          files = [...files, ...collectAllFiles(child, child)];
         }
       }
     }
     return files;
   };
 
-  const files = collectAllFiles(node);
+  const files = collectAllFiles(node, node);
 
   return (
-    <div className="bg-card-bg rounded-[32px] shadow-[0_0_16px_rgba(0,0,0,0.25)] p-8 mt-[56px] ml-[32px] mr-[24px] flex-1 overflow-x-auto max-w-full">
+    <div className="bg-card-bg rounded-[32px] shadow-[0_0_16px_rgba(0,0,0,0.25)] p-8 mt-[56px] ml-[32px] mr-[24px] mb-[80px] flex-1 overflow-x-auto max-w-full">
       {/* Header Section */}
       <div className="flex items-center mb-2">
         <div className="w-10 h-10 bg-icon-bg rounded-full flex items-center justify-center mr-2">
@@ -77,18 +84,37 @@ function MainCard({ node }) {
         {industry} • {jurisdiction} • Owner: {owner}
       </p>
       <p className="text-muted-text">
-        Created: {formatDate(createdAt)} • Last Modified:{" "}
-        {formatDate(modifiedAt)}
+        Created: {formatDate(created_at)} • Last Modified:{" "}
+        {formatDate(last_modified)}
       </p>
 
-      {/* Entity Table (root only) */}
-      {type === "entity-root" && <EntityTable entities={entities} />}
+      {/* Entity Table (only root node) */}
+      {type === "entity" && <EntityTable entities={entities} />}
 
-      {/* Investment Table (entity only) */}
-      {type === "entity" && <InvestmentTable investments={investments} />}
+      {/* Investment Table (for entities that have investments) */}
+      {type === "entity" && investments.length > 0 && (
+        <InvestmentTable investments={investments} />
+      )}
 
-      {/* Related Files Table (for all types) */}
-      <FilesTable files={files} />
+      {/* Related Files Table */}
+      <FilesTable
+        files={files}
+        onNavigateToDirectory={(dirNode) => {
+          if (dirNode) {
+            window.dispatchEvent(
+              new CustomEvent("select-directory", { detail: dirNode })
+            );
+          }
+        }}
+        onTriggerToast={showToast}
+      />
+
+      {/* Toast */}
+      {toast && (
+        <div className="fixed bottom-6 right-6 bg-primary text-white px-4 py-2 rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.25)] animate-fade-in-out z-[999]">
+          {toast}
+        </div>
+      )}
     </div>
   );
 }

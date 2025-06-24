@@ -1,12 +1,9 @@
-import { useState } from "react";
-
 import SidebarItem from "./SidebarItem";
 import SidebarAccount from "./SidebarAccount";
 
 import CollapseIcon from "../../assets/Collapsed.png";
 import Logo from "../../assets/Logo_Full.png";
 import ArrowRightIcon from "../../assets/Arrow-Right.png";
-import ArrowDownIcon from "../../assets/Arrow-Down.png";
 import HoldingIcon from "../../assets/Holding.png";
 import HomeIcon from "../../assets/Home.png";
 import PortfolioIcon from "../../assets/Portfolio.png";
@@ -32,8 +29,13 @@ const menuItems = [
   { label: "Help", icon: HelpIcon },
 ];
 
-function SidebarExpanded({ onCollapse, showTree, setShowTree }) {
-  const [activeItem, setActiveItem] = useState("Portfolio");
+function SidebarExpanded({
+  onCollapse,
+  showTree,
+  setShowTree,
+  activeItem,
+  setActiveItem,
+}) {
   const root = data;
 
   return (

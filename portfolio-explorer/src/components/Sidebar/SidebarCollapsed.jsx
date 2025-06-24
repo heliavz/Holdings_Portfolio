@@ -27,14 +27,23 @@ const icons = [
   HelpIcon,
 ];
 
-function SidebarCollapsed({ onExpand, showTree, setShowTree }) {
+function SidebarCollapsed({
+  onExpand,
+  showTree,
+  setShowTree,
+  activeItem,
+  setActiveItem,
+}) {
   const root = data;
   const [hovered, setHovered] = useState(false);
 
   const handleRootClick = () => {
+    setActiveItem("Portfolio");
     setShowTree(true);
-    onExpand();
+    onExpand(); // optional: open sidebar
   };
+
+  const isRootDisabled = activeItem === "Portfolio" && showTree;
 
   return (
     <aside className="w-[64px] h-full overflow-y-auto bg-card-bg flex flex-col justify-between items-center shadow-[2px_0_16px_rgba(0,0,0,0.25)] relative z-20">
@@ -56,27 +65,59 @@ function SidebarCollapsed({ onExpand, showTree, setShowTree }) {
         <div className="w-[32px] h-[1px] bg-border my-8" />
 
         <ul className="space-y-8 flex flex-col items-center">
-          {icons.map((icon, i) => (
-            <li key={i} className="flex flex-col items-center">
-              <img src={icon} className="w-6 h-6 hover:cursor-pointer" />
-              {i === 1 && !showTree && (
+          {icons.map((icon, i) => {
+            // Map index to label string for matching activeItem
+            const labelMap = [
+              "Home",
+              "Portfolio",
+              "Investments",
+              "Documents",
+              "Transactions",
+              "Inbox",
+              "Members",
+              "Settings",
+              "Help",
+            ];
+            const label = labelMap[i];
+
+            // Determine if this icon is active
+            const isActive = activeItem === label;
+
+            return (
+              <li key={i} className="flex flex-col items-center">
                 <div
-                  onMouseEnter={() => setHovered(true)}
-                  onMouseLeave={() => setHovered(false)}
-                  onClick={handleRootClick}
-                  className={`mt-2 p-2 rounded-[16px] ${
-                    hovered ? "bg-hover" : "bg-focus"
-                  } border border-primary hover:opacity-90 hover:cursor-pointer flex justify-center transition-all duration-200`}
+                  onClick={() => setActiveItem(label)}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200
+            ${isActive ? "bg-focus border border-primary" : ""}
+            hover:bg-hover`}
                 >
-                  <img
-                    src={HoldingIcon}
-                    className="w-4 h-4"
-                    alt="Alpha Holding"
-                  />
+                  <img src={icon} className="w-6 h-6" alt={label} />
                 </div>
-              )}
-            </li>
-          ))}
+
+                {/* Your Holding icon logic */}
+                {i === 1 && !isActive && !showTree && (
+                  <div
+                    onMouseEnter={() => setHovered(true)}
+                    onMouseLeave={() => setHovered(false)}
+                    onClick={() => {
+                      setActiveItem("Portfolio");
+                      setShowTree(true);
+                      onExpand();
+                    }}
+                    className={`mt-2 p-2 rounded-[16px] ${
+                      hovered ? "bg-hover" : "bg-focus"
+                    } border border-primary hover:opacity-90 hover:cursor-pointer flex justify-center transition-all duration-200`}
+                  >
+                    <img
+                      src={HoldingIcon}
+                      className="w-4 h-4"
+                      alt="Alpha Holding"
+                    />
+                  </div>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
 

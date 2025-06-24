@@ -16,7 +16,7 @@ function SearchBar() {
       </div>
 
       {/* Filter Button */}
-      <div className="w-[48px] h-[48px] rounded-full bg-focus flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.25)] cursor-pointer mr-[24px]">
+      <div className="w-[48px] h-[48px] rounded-full bg-focus flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.25)] cursor-pointer hover:bg-hover hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)] transition-all duration-200 mr-[24px]">
         <img src={FilterIcon} alt="Filter" className="w-6 h-6" />
       </div>
     </div>

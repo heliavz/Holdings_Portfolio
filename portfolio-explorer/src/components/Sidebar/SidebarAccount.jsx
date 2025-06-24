@@ -25,7 +25,7 @@ function SidebarAccount() {
         <button onClick={toggleDropdown}>
           <img
             src={DropdownIcon}
-            className={`w-6 h-6 transition-transform ${
+            className={`w-6 h-6 transition-transform hover:cursor-pointer ${
               open ? "rotate-180" : ""
             }`}
             alt="Toggle"
@@ -35,7 +35,7 @@ function SidebarAccount() {
 
       {open &&
         createPortal(
-          <div className="absolute bottom-[72px] left-4 z-[999]">
+          <div className="absolute bottom-[72px] left-4 z-[999] ">
             <AccountDropdown />
           </div>,
           document.getElementById("dropdown-root")
