@@ -1,18 +1,16 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import DropdownIcon from "../../assets/Dropdown.png";
 import ProfilePic from "../../assets/Profile.jpg";
 import AccountDropdown from "./AccountDropdown";
 
 function SidebarAccount() {
   const [open, setOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setOpen((prev) => !prev);
-  };
+  const toggleDropdown = () => setOpen((prev) => !prev);
 
   return (
-    <div className="relative">
-      <div className="bg-white px-4 py-3 shadow-[-2px_0_16px_rgba(0,0,0,0.25)] flex items-center justify-between">
+    <div className="relative z-50 shadow-[-2px_0_16px_rgba(0,0,0,0.25)]">
+      <div className="bg-white px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img
             src={ProfilePic}
@@ -27,20 +25,21 @@ function SidebarAccount() {
         <button onClick={toggleDropdown}>
           <img
             src={DropdownIcon}
-            alt="Dropdown icon"
-            className={`w-6 h-6 text-muted-text hover:cursor-pointer transition-transform duration-200 ${
+            className={`w-6 h-6 transition-transform ${
               open ? "rotate-180" : ""
             }`}
+            alt="Toggle"
           />
         </button>
       </div>
 
-      {/* Dropdown */}
-      {open && (
-        <div className="animate-fade-in-down">
-          <AccountDropdown />
-        </div>
-      )}
+      {open &&
+        createPortal(
+          <div className="absolute bottom-[72px] left-4 z-[999]">
+            <AccountDropdown />
+          </div>,
+          document.getElementById("dropdown-root")
+        )}
     </div>
   );
 }

@@ -10,12 +10,22 @@ import FileIcon from "../../assets/File.png";
 import TreeItem from "./TreeItem";
 import data from "../../data/file-structure.json";
 
-function TreeViewPanel({ onClose }) {
+function TreeViewPanel({ onClose, onSelect }) {
   const [expanded, setExpanded] = useState(true);
   const [selected, setSelected] = useState(data.name);
   const [isPanelVisible, setPanelVisible] = useState(true);
 
   const root = data;
+
+  const findNodeByName = (node, name) => {
+    if (node.name === name) return node;
+    if (!node.children) return null;
+    for (const child of node.children) {
+      const found = findNodeByName(child, name);
+      if (found) return found;
+    }
+    return null;
+  };
 
   const getIconByType = (type) => {
     switch (type) {
@@ -36,6 +46,10 @@ function TreeViewPanel({ onClose }) {
 
   const handleSelect = (name) => {
     setSelected(name);
+    const node = findNodeByName(root, name);
+    if (node) {
+      onSelect(node);
+    }
   };
 
   const handleToggleExpand = () => {

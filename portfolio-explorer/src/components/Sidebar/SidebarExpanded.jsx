@@ -6,6 +6,7 @@ import SidebarAccount from "./SidebarAccount";
 import CollapseIcon from "../../assets/Collapsed.png";
 import Logo from "../../assets/Logo_Full.png";
 import ArrowRightIcon from "../../assets/Arrow-Right.png";
+import ArrowDownIcon from "../../assets/Arrow-Down.png";
 import HoldingIcon from "../../assets/Holding.png";
 import HomeIcon from "../../assets/Home.png";
 import PortfolioIcon from "../../assets/Portfolio.png";
@@ -36,7 +37,7 @@ function SidebarExpanded({ onCollapse, showTree, setShowTree }) {
   const root = data;
 
   return (
-    <aside className="w-[270px] h-full bg-card-bg flex flex-col justify-between shadow-[2px_0_16px_rgba(0,0,0,0.25)]">
+    <aside className="w-[270px] h-full overflow-y-auto bg-card-bg flex flex-col justify-between shadow-[2px_0_16px_rgba(0,0,0,0.25)]">
       <div>
         <div className="flex justify-end p-4">
           <button onClick={onCollapse}>
@@ -61,36 +62,27 @@ function SidebarExpanded({ onCollapse, showTree, setShowTree }) {
               {...item}
               isActive={activeItem === item.label}
               onClick={() => setActiveItem(item.label)}
+              children={
+                item.label === "Portfolio" &&
+                !showTree && (
+                  <div
+                    onClick={() => setShowTree(true)}
+                    className="flex items-center justify-between hover:bg-hover cursor-pointer transition-all duration-200 w-full px-3 py-2 rounded-[16px]"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-icon-bg rounded-full flex items-center justify-center">
+                        <img src={HoldingIcon} className="w-4 h-4" />
+                      </div>
+                      <span className="text-sm font-medium text-text truncate w-[100px]">
+                        {root.name}
+                      </span>
+                    </div>
+                    <img src={ArrowRightIcon} className="w-6 h-6 ml-2" />
+                  </div>
+                )
+              }
             />
           ))}
-
-          {/* If tree panel is closed and "Portfolio" is selected */}
-          {activeItem === "Portfolio" && !showTree && (
-            <li className="relative bg-focus border border-primary rounded-[24px] h-[96px] mt-2 mx-4 px-4 py-3">
-              <div className="w-[208px] h-[1px] bg-border mb-3" />
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-icon-bg rounded-full flex items-center justify-center">
-                    <img src={HoldingIcon} className="w-4 h-4" />
-                  </div>
-                  <span className="text-sm font-medium text-text truncate w-[100px]">
-                    {root.name}
-                  </span>
-                </div>
-                <button
-                  onClick={() => setShowTree(true)}
-                  className="hover:opacity-80"
-                >
-                  <img
-                    src={ArrowRightIcon}
-                    className="w-6 h-6 ml-2"
-                    alt="Open"
-                  />
-                </button>
-              </div>
-            </li>
-          )}
         </ul>
       </div>
 
