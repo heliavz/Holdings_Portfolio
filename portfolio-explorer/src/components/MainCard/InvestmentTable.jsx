@@ -8,6 +8,7 @@ import OwnerIcon from "../../assets/Owner.png";
 import TagsIcon from "../../assets/Tags.png";
 import ModifiedIcon from "../../assets/Modified.png";
 import ActionsIcon from "../../assets/Actions.png";
+import ArrowRightIcon from "../../assets/Arrow-Right(mute).png";
 
 function InvestmentTable({ investments = [], onSelectNode }) {
   if (!investments.length) return null;
@@ -66,10 +67,15 @@ function InvestmentTable({ investments = [], onSelectNode }) {
             <div>{formatDate(inv.last_modified)}</div>
             <div>
               <button
-                className="text-sm text-muted-text hover:underline cursor-pointer"
+                className="flex items-center text-sm text-muted-text hover:underline cursor-pointer"
                 onClick={() => onSelectNode(inv)}
               >
                 Go to investment
+                <img
+                  src={ArrowRightIcon}
+                  alt="arrow"
+                  className="w-4 h-4 ml-1"
+                />
               </button>
             </div>
           </div>

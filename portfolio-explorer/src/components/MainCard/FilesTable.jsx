@@ -96,13 +96,14 @@ function FilesTable({
                   <div>{file.owner}</div>
                   <div>{formatDate(file.created_at)}</div>
                   <div>{formatDate(file.last_modified)}</div>
-                  <div className="flex flex-col gap-[2px]">
+                  <div className="flex items-center gap-2">
                     <button
                       className="text-sm text-primary hover:underline hover:cursor-pointer"
                       onClick={handleDownload}
                     >
                       Download
                     </button>
+                    <div className="h-[15px] w-px bg-border" />
                     <button
                       className="flex items-center text-muted-text text-sm hover:underline hover:cursor-pointer"
                       onClick={() => {

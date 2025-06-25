@@ -9,6 +9,7 @@ import IndustryIcon from "../../assets/Industry.png";
 import CreatedIcon from "../../assets/Created.png";
 import ModifiedIcon from "../../assets/Modified.png";
 import ActionsIcon from "../../assets/Actions.png";
+import ArrowRightIcon from "../../assets/Arrow-Right(mute).png";
 
 function EntityTable({ entities = [], onSelectNode }) {
   if (!entities.length) return null;
@@ -63,10 +64,15 @@ function EntityTable({ entities = [], onSelectNode }) {
             <div>{formatDate(e.last_modified)}</div>
             <div>
               <button
-                className="text-sm text-muted-text hover:underline cursor-pointer"
+                className="flex items-center text-sm text-muted-text hover:underline cursor-pointer"
                 onClick={() => onSelectNode(e)}
               >
                 Go to entity
+                <img
+                  src={ArrowRightIcon}
+                  alt="arrow"
+                  className="w-4 h-4 ml-1"
+                />
               </button>
             </div>
           </div>
