@@ -8,46 +8,52 @@ import OwnerIcon from "../../assets/Owner.png";
 import IndustryIcon from "../../assets/Industry.png";
 import CreatedIcon from "../../assets/Created.png";
 import ModifiedIcon from "../../assets/Modified.png";
+import ActionsIcon from "../../assets/Actions.png";
 
-function EntityTable({ entities = [] }) {
+function EntityTable({ entities = [], onSelectNode }) {
   if (!entities.length) return null;
 
   return (
     <div className="mt-8 overflow-x-auto">
       <h3 className="text-[20px] font-medium text-text mb-3">Entities</h3>
       <div className="min-w-[800px] border border-border bg-background rounded-[16px] overflow-hidden">
-        <div className="grid grid-cols-6 text-sm font-medium bg-header-bg border-b border-border px-4 py-2 rounded-t-[16px]">
+        <div className="grid grid-cols-7 text-sm font-medium bg-header-bg border-b border-border px-4 py-2 rounded-t-[16px]">
           <div className="flex items-center gap-1">
-            <img src={NameIcon} alt="Name" className="w-4 h-4" />
-            Name
+            <img src={NameIcon} alt="Name" className="w-4 h-4" /> Name
           </div>
           <div className="flex items-center gap-1">
-            <img src={StatusIcon} alt="Status" className="w-4 h-4" />
-            Status
+            <img src={StatusIcon} alt="Status" className="w-4 h-4" /> Status
           </div>
           <div className="flex items-center gap-1">
-            <img src={OwnerIcon} alt="Owner" className="w-4 h-4" />
-            Owner
+            <img src={OwnerIcon} alt="Owner" className="w-4 h-4" /> Owner
           </div>
           <div className="flex items-center gap-1">
-            <img src={IndustryIcon} alt="Industry" className="w-4 h-4" />
+            <img src={IndustryIcon} alt="Industry" className="w-4 h-4" />{" "}
             Industry
           </div>
           <div className="flex items-center gap-1">
-            <img src={CreatedIcon} alt="Created" className="w-4 h-4" />
-            Created
+            <img src={CreatedIcon} alt="Created" className="w-4 h-4" /> Created
           </div>
           <div className="flex items-center gap-1">
-            <img src={ModifiedIcon} alt="Modified" className="w-4 h-4" />
-            Last Modified
+            <img src={ModifiedIcon} alt="Modified" className="w-4 h-4" /> Last
+            Modified
+          </div>
+          <div className="flex items-center gap-1">
+            <img src={ActionsIcon} alt="Actions" className="w-4 h-4" />
+            Actions
           </div>
         </div>
         {entities.map((e, idx) => (
           <div
             key={idx}
-            className="grid grid-cols-6 text-sm text-text px-4 py-2 border-t border-border"
+            className="grid grid-cols-7 text-sm text-text px-4 py-2 border-t border-border items-center"
           >
-            <div className="break-words">{e.name}</div>
+            <div
+              className="text-text hover:underline hover:text-primary cursor-pointer"
+              onClick={() => onSelectNode(e)}
+            >
+              {e.name}
+            </div>
             <div>
               <StatusTag status={e.status} />
             </div>
@@ -55,6 +61,14 @@ function EntityTable({ entities = [] }) {
             <div>{e.industry}</div>
             <div>{formatDate(e.created_at)}</div>
             <div>{formatDate(e.last_modified)}</div>
+            <div>
+              <button
+                className="text-sm text-muted-text hover:underline cursor-pointer"
+                onClick={() => onSelectNode(e)}
+              >
+                Go to entity
+              </button>
+            </div>
           </div>
         ))}
       </div>

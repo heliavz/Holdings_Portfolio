@@ -99,12 +99,38 @@ function MainCard({ node }) {
         {formatDate(last_modified)}
       </p>
       {/* Entity Table (only root node) */}
-      {type === "entity" && <EntityTable entities={entities} />}
+      {type === "entity" && (
+        <EntityTable
+          entities={entities}
+          onSelectNode={(node) =>
+            window.dispatchEvent(
+              new CustomEvent("select-directory", { detail: node })
+            )
+          }
+        />
+      )}
       {/* Investment Table (for entities that have investments) */}
       {type === "entity" && investments.length > 0 && (
-        <InvestmentTable investments={investments} />
+        <InvestmentTable
+          investments={investments}
+          onSelectNode={(node) =>
+            window.dispatchEvent(
+              new CustomEvent("select-directory", { detail: node })
+            )
+          }
+        />
       )}
-      {directories.length > 0 && <DirectoryTable directories={directories} />}
+      {/* Folders Table */}
+      {directories.length > 0 && (
+        <DirectoryTable
+          directories={directories}
+          onSelectNode={(node) =>
+            window.dispatchEvent(
+              new CustomEvent("select-directory", { detail: node })
+            )
+          }
+        />
+      )}
       {/* Related Files Table */}
       <FilesTable
         files={files}
@@ -116,7 +142,33 @@ function MainCard({ node }) {
           }
         }}
         onTriggerToast={showToast}
+        onSelectNode={(node) =>
+          window.dispatchEvent(
+            new CustomEvent("select-directory", { detail: node })
+          )
+        }
       />
+      {type === "file" && (
+        <div className="mt-8">
+          <h3 className="text-[20px] font-medium text-text mb-4">
+            File Actions
+          </h3>
+          <div className="flex gap-4">
+            <button
+              onClick={() => showToast("Download successful.")}
+              className="bg-primary text-white px-4 py-2 rounded-[16px] transition cursor-pointer shadow-[0_2px_6px_rgba(0,0,0,0.15)] hover:bg-focus hover:text-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.25)]"
+            >
+              Download
+            </button>
+            <button
+              onClick={() => showToast("Opening file preview...")}
+              className="bg-focus text-primary px-4 py-2 rounded-[16px] transition cursor-pointer shadow-[0_2px_6px_rgba(0,0,0,0.15)] hover:bg-primary hover:text-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.25)]"
+            >
+              Preview
+            </button>
+          </div>
+        </div>
+      )}
       {/* Toast */}
       {toast && (
         <div className="fixed bottom-6 right-6 bg-primary text-white px-4 py-2 rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.25)] animate-fade-in-out z-[999]">

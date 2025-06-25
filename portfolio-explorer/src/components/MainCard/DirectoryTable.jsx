@@ -5,11 +5,7 @@ import OwnerIcon from "../../assets/Owner.png";
 import ActionsIcon from "../../assets/Actions.png";
 import ArrowRightIcon from "../../assets/Arrow-Right(mute).png";
 
-function DirectoryTable({ directories }) {
-  const handleGoToFolder = (dir) => {
-    window.dispatchEvent(new CustomEvent("select-directory", { detail: dir }));
-  };
-
+function DirectoryTable({ directories, onSelectNode }) {
   return (
     <div className="mt-8 overflow-x-auto relative">
       <h3 className="text-[20px] font-medium text-text mb-3">Folders</h3>
@@ -44,8 +40,11 @@ function DirectoryTable({ directories }) {
         ) : (
           directories.map((dir, idx) => (
             <div key={idx}>
-              <div className="grid grid-cols-4 text-sm text-text py-1">
-                <div className="flex items-center">
+              <div className="grid grid-cols-4 text-sm text-text py-1 items-center">
+                <div
+                  className="flex items-center cursor-pointer hover:underline hover:text-primary"
+                  onClick={() => onSelectNode(dir)}
+                >
                   <img src={FolderIcon} alt="Folder" className="w-4 h-4 mr-1" />
                   {dir.name}
                 </div>
@@ -53,8 +52,8 @@ function DirectoryTable({ directories }) {
                 <div>{dir.owner}</div>
                 <div>
                   <button
-                    onClick={() => handleGoToFolder(dir)}
-                    className="flex items-center text-muted-text hover:underline hover:cursor-pointer"
+                    onClick={() => onSelectNode(dir)}
+                    className="flex items-center text-muted-text hover:underline cursor-pointer"
                   >
                     Go to folder
                     <img

@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import TreeViewPanel from "./components/TreeView/TreeViewPanel";
 import SearchBar from "./components/Search/SearchBar";
 import MainCard from "./components/MainCard/MainCard";
+import Breadcrumbs from "./components/Breadcrumbs/Breadcrumbs";
 import data from "./data/file-structure.json";
 
 function App() {
@@ -67,6 +68,15 @@ function App() {
       )}
       <div className="flex-1 overflow-y-auto">
         <SearchBar />
+        <Breadcrumbs
+          selectedNode={selectedNode}
+          rootNode={data}
+          onSelect={(node) => {
+            setSelectedNode(node);
+            setActiveItem("Portfolio");
+            setShowTree(true); // optional: open the tree
+          }}
+        />
         <MainCard node={selectedNode} />
       </div>
     </div>

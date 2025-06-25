@@ -1,4 +1,3 @@
-import { useState } from "react";
 import formatDate from "../../utils/formatDate";
 
 // Header icons
@@ -14,15 +13,14 @@ import DocIcon from "../../assets/Doc.png";
 import PDFIcon from "../../assets/PDF.png";
 import XlsxIcon from "../../assets/Xls.png";
 
-function FilesTable({ files, onNavigateToDirectory, onTriggerToast }) {
+function FilesTable({
+  files,
+  onNavigateToDirectory,
+  onTriggerToast,
+  onSelectNode,
+}) {
   const handleDownload = () => {
     onTriggerToast("Download successful");
-  };
-
-  const handleGoToDirectory = (file) => {
-    if (file.directoryNode) {
-      onNavigateToDirectory(file.directoryNode);
-    }
   };
 
   const getFileIcon = (fileName) => {
@@ -81,8 +79,11 @@ function FilesTable({ files, onNavigateToDirectory, onTriggerToast }) {
             const icon = getFileIcon(file.name);
             return (
               <div key={idx}>
-                <div className="grid grid-cols-5 text-sm text-text py-1">
-                  <div className="flex items-center">
+                <div className="grid grid-cols-5 text-sm text-text py-1 items-center">
+                  <div
+                    className="flex items-center cursor-pointer hover:underline hover:text-primary"
+                    onClick={() => onSelectNode(file)}
+                  >
                     {icon && (
                       <img
                         src={icon}
@@ -95,17 +96,20 @@ function FilesTable({ files, onNavigateToDirectory, onTriggerToast }) {
                   <div>{file.owner}</div>
                   <div>{formatDate(file.created_at)}</div>
                   <div>{formatDate(file.last_modified)}</div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col gap-[2px]">
                     <button
-                      className="text-primary hover:underline hover:cursor-pointer"
+                      className="text-sm text-primary hover:underline hover:cursor-pointer"
                       onClick={handleDownload}
                     >
                       Download
                     </button>
-                    <div className="h-[15px] w-px bg-border" />
                     <button
-                      onClick={() => handleGoToDirectory(file)}
-                      className="flex items-center text-muted-text hover:underline hover:cursor-pointer"
+                      className="flex items-center text-muted-text text-sm hover:underline hover:cursor-pointer"
+                      onClick={() => {
+                        if (file.directoryNode) {
+                          onNavigateToDirectory(file.directoryNode);
+                        }
+                      }}
                     >
                       Go to folder
                       <img
@@ -116,8 +120,6 @@ function FilesTable({ files, onNavigateToDirectory, onTriggerToast }) {
                     </button>
                   </div>
                 </div>
-
-                {/* Custom separator line */}
                 <div className="w-[226px] mx-auto h-px bg-border opacity-50 scale-y-[0.5]" />
               </div>
             );
