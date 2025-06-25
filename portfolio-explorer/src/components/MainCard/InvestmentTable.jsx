@@ -42,23 +42,25 @@ function InvestmentTable({ investments = [] }) {
         {investments.map((inv, idx) => (
           <div
             key={idx}
-            className="grid grid-cols-5 text-sm text-text px-4 py-2 border-t border-border"
+            className="grid grid-cols-5 text-sm text-text px-4 py-3 border-t border-border items-start gap-y-2"
           >
             <div className="break-words">{inv.name}</div>
             <div>
               <StatusTag status={inv.status} />
             </div>
             <div>{inv.owner}</div>
-            <div className="flex flex-wrap gap-1">
+
+            <div className="flex flex-wrap gap-x-2 gap-y-1 items-start">
               {inv.tags?.map((tag, tagIdx) => (
                 <div
                   key={tagIdx}
-                  className="px-2 py-1 bg-focus text-primary rounded-[32px] text-xs"
+                  className="px-2 py-[4px] bg-focus text-primary rounded-[32px] text-xs leading-tight"
                 >
                   {tag}
                 </div>
               ))}
             </div>
+
             <div>{formatDate(inv.last_modified)}</div>
           </div>
         ))}

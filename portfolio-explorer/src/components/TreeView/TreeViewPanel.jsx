@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ArrowDown from "../../assets/Arrow-Down.png";
 import ArrowUp from "../../assets/Arrow-Up.png";
 import SidebarIcon from "../../assets/Sidebar.png";
@@ -14,6 +14,18 @@ function TreeViewPanel({ onClose, onSelect }) {
   const [expanded, setExpanded] = useState(true);
   const [selected, setSelected] = useState(data.name);
   const [isPanelVisible, setPanelVisible] = useState(true);
+
+  useEffect(() => {
+    const handler = (e) => {
+      const node = e.detail;
+      if (node && node.name) {
+        setSelected(node.name);
+      }
+    };
+
+    window.addEventListener("select-directory", handler);
+    return () => window.removeEventListener("select-directory", handler);
+  }, []);
 
   const root = data;
 

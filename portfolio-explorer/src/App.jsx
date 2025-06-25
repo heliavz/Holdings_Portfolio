@@ -11,21 +11,33 @@ function App() {
   const [collapsed, setCollapsed] = useState(false);
   const [activeItem, setActiveItem] = useState("Portfolio");
   const [isMobile, setIsMobile] = useState(false);
-  const [selectedNode, setSelectedNode] = useState(data); // default: root node
+  const [selectedNode, setSelectedNode] = useState(data);
 
-  // Handle window resize and collapse sidebar on mobile
+  // Listen for folder selection from directory table
+  useEffect(() => {
+    const handler = (e) => {
+      const node = e.detail;
+      if (node) {
+        setSelectedNode(node);
+        setActiveItem("Portfolio");
+        setShowTree(true); // make sure TreeView is open
+      }
+    };
+    window.addEventListener("select-directory", handler);
+    return () => window.removeEventListener("select-directory", handler);
+  }, []);
+
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth < 1024;
       setIsMobile(mobile);
 
-      // On mobile: collapse sidebar & hide tree view
       if (mobile) {
         setCollapsed(true);
         setShowTree(false);
-        setActiveItem("Portfolio"); // reset active to Portfolio on mobile
+        setActiveItem("Portfolio");
       } else {
-        setCollapsed(false); // expand sidebar on desktop by default
+        setCollapsed(false);
         setShowTree(true);
       }
     };

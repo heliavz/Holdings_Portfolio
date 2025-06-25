@@ -107,7 +107,7 @@ function FilesTable({ files, onNavigateToDirectory, onTriggerToast }) {
                       onClick={() => handleGoToDirectory(file)}
                       className="flex items-center text-muted-text hover:underline hover:cursor-pointer"
                     >
-                      Go to directory
+                      Go to folder
                       <img
                         src={ArrowRightIcon}
                         alt="arrow"

@@ -46,14 +46,13 @@ function SidebarCollapsed({
   const handleRootClick = () => {
     setActiveItem("Portfolio");
     setShowTree(true);
-    onExpand(); // optional: open sidebar
+    onExpand();
   };
 
   const handleProfileClick = () => {
     setDropdownOpen((prev) => !prev);
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -70,15 +69,14 @@ function SidebarCollapsed({
     };
   }, []);
 
-  // Update dropdown position when opened or window resized
   useEffect(() => {
     function updatePosition() {
       if (profileRef.current) {
         const rect = profileRef.current.getBoundingClientRect();
         setDropdownStyles({
           position: "absolute",
-          top: rect.bottom + 8 + window.scrollY, // position dropdown BELOW profile pic
-          left: rect.left + window.scrollX,
+          top: `${rect.top - 210}px`, // Adjust height above the profile icon
+          left: `${rect.left + rect.width + 8}px`, // To the right of the sidebar
           zIndex: 9999,
           width: "264px",
         });
@@ -108,10 +106,7 @@ function SidebarCollapsed({
   ];
 
   return (
-    <aside
-      className="w-[64px] h-full overflow-y-auto bg-card-bg flex flex-col justify-between items-center relative z-20 transition-width duration-300 ease-in-out"
-      style={{ position: "relative" }}
-    >
+    <aside className="w-[64px] h-full overflow-y-auto bg-card-bg flex flex-col justify-between items-center relative z-[30] transition-width duration-300 ease-in-out">
       <div>
         <div className="mt-4 flex flex-col items-center">
           <button
@@ -138,7 +133,7 @@ function SidebarCollapsed({
             const isActive = activeItem === label;
 
             return (
-              <li key={i} className="flex flex-col items-center">
+              <li key={i} className="flex flex-col items-center relative">
                 <div
                   onClick={() => setActiveItem(label)}
                   className={`w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300
@@ -152,7 +147,7 @@ function SidebarCollapsed({
                   />
                 </div>
 
-                {i === 1 && !isActive && !showTree && (
+                {label === "Portfolio" && !showTree && (
                   <div
                     onMouseEnter={() => setHovered(true)}
                     onMouseLeave={() => setHovered(false)}
@@ -175,7 +170,7 @@ function SidebarCollapsed({
       </div>
 
       {/* Account section */}
-      <div className="mb-6 w-full flex justify-center">
+      <div className="mb-6 w-full flex justify-center z-[50]">
         <div
           className="profile-pic-container relative cursor-pointer"
           onClick={handleProfileClick}
@@ -193,7 +188,7 @@ function SidebarCollapsed({
       {dropdownOpen &&
         ReactDOM.createPortal(
           <div
-            className="account-dropdown animate-fade-in-down bg-white rounded-[8px] shadow-[0_0_16px_rgba(0,0,0,0.25)] p-3"
+            className="account-dropdown animate-fade-in-down"
             style={dropdownStyles}
           >
             <AccountDropdown />
