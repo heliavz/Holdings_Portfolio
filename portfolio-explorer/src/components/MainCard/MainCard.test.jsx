@@ -3,7 +3,6 @@ import MainCard from "./MainCard";
 import mockData from "../../data/file-structure.json";
 import formatDate from "../../utils/formatDate";
 
-// Reuse this from before
 function findEntityWithMeta(node) {
   if (
     node.type === "entity" &&

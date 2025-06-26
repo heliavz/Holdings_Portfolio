@@ -23,7 +23,7 @@ function TreeItem({ node, level, getIconByType, selected, onSelect }) {
         }`}
         style={{ marginLeft: `${level * 16}px`, cursor: "pointer" }}
       >
-        {/* Toggle Icon (purely visual now) */}
+        {/* Toggle Icon */}
         {hasChildren ? (
           <img
             src={isExpanded ? MinusIcon : PlusIcon}

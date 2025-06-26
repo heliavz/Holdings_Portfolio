@@ -74,7 +74,7 @@ function App() {
           onSelect={(node) => {
             setSelectedNode(node);
             setActiveItem("Portfolio");
-            setShowTree(true); // optional: open the tree
+            setShowTree(true);
           }}
         />
         <MainCard node={selectedNode} />
