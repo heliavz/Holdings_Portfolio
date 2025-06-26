@@ -13,7 +13,7 @@ import MembersIcon from "../../assets/Members.png";
 import SettingsIcon from "../../assets/Settings.png";
 import HelpIcon from "../../assets/Help.png";
 import HoldingIcon from "../../assets/Holding.png";
-import ProfilePic from "../../assets/Profile.jpg";
+import ProfilePic from "../../assets/Profile.png";
 import data from "../../data/file-structure.json";
 
 import AccountDropdown from "../Sidebar/AccountDropdown";

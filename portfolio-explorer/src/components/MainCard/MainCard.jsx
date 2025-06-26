@@ -16,8 +16,8 @@ function MainCard({ node }) {
   const [fadeKey, setFadeKey] = useState(0);
 
   useEffect(() => {
-    setFadeKey((prev) => prev + 1); // trigger re-mount on node change
-  }, [node.name]); // based on unique identifier of node
+    setFadeKey((prev) => prev + 1);
+  }, [node.name]);
 
   const getIconByType = (type) => {
     switch (type) {
@@ -77,8 +77,6 @@ function MainCard({ node }) {
       key={fadeKey}
       className="animate-fade-in-down bg-card-bg rounded-[32px] shadow-[0_0_16px_rgba(0,0,0,0.25)] p-8 mt-[56px] ml-[32px] mr-[24px] mb-[80px] flex-1 overflow-x-auto max-w-full"
     >
-      {" "}
-      {/* Header Section */}
       <div className="flex items-center mb-2">
         <div className="w-10 h-10 bg-icon-bg rounded-full flex items-center justify-center mr-2">
           <img
@@ -90,7 +88,7 @@ function MainCard({ node }) {
         <h2 className="text-[24px] font-medium text-text mr-2">{name}</h2>
         {status && <StatusTag status={status} />}
       </div>
-      {/* Meta Info */}
+
       <p className="text-text mb-2">
         {industry} • {jurisdiction} • Owner: {owner}
       </p>
@@ -98,7 +96,7 @@ function MainCard({ node }) {
         Created: {formatDate(created_at)} • Last Modified:{" "}
         {formatDate(last_modified)}
       </p>
-      {/* Entity Table (only root node) */}
+
       {type === "entity" && (
         <EntityTable
           entities={entities}
@@ -109,7 +107,7 @@ function MainCard({ node }) {
           }
         />
       )}
-      {/* Investment Table (for entities that have investments) */}
+
       {type === "entity" && investments.length > 0 && (
         <InvestmentTable
           investments={investments}
@@ -120,7 +118,7 @@ function MainCard({ node }) {
           }
         />
       )}
-      {/* Folders Table */}
+
       {directories.length > 0 && (
         <DirectoryTable
           directories={directories}
@@ -131,23 +129,26 @@ function MainCard({ node }) {
           }
         />
       )}
-      {/* Related Files Table */}
-      <FilesTable
-        files={files}
-        onNavigateToDirectory={(dirNode) => {
-          if (dirNode) {
+
+      {type !== "file" && (
+        <FilesTable
+          files={files}
+          onNavigateToDirectory={(dirNode) => {
+            if (dirNode) {
+              window.dispatchEvent(
+                new CustomEvent("select-directory", { detail: dirNode })
+              );
+            }
+          }}
+          onTriggerToast={showToast}
+          onSelectNode={(node) =>
             window.dispatchEvent(
-              new CustomEvent("select-directory", { detail: dirNode })
-            );
+              new CustomEvent("select-directory", { detail: node })
+            )
           }
-        }}
-        onTriggerToast={showToast}
-        onSelectNode={(node) =>
-          window.dispatchEvent(
-            new CustomEvent("select-directory", { detail: node })
-          )
-        }
-      />
+        />
+      )}
+
       {type === "file" && (
         <div className="mt-8">
           <h3 className="text-[20px] font-medium text-text mb-4">
@@ -169,7 +170,7 @@ function MainCard({ node }) {
           </div>
         </div>
       )}
-      {/* Toast */}
+
       {toast && (
         <div className="fixed bottom-6 right-6 bg-primary text-white px-4 py-2 rounded-[16px] shadow-[0_4px_16px_rgba(0,0,0,0.25)] animate-fade-in-out z-[999]">
           {toast}

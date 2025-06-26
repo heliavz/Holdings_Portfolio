@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import DropdownIcon from "../../assets/Dropdown.png";
-import ProfilePic from "../../assets/Profile.jpg";
+import ProfilePic from "../../assets/Profile.png";
 import AccountDropdown from "./AccountDropdown";
 
 function SidebarAccount() {
@@ -14,7 +14,7 @@ function SidebarAccount() {
         <div className="flex items-center gap-3">
           <img
             src={ProfilePic}
-            className="w-10 h-10 rounded-full border border-border"
+            className="w-10 h-10 object-cover rounded-full border border-border"
             alt="Profile"
           />
           <div>
