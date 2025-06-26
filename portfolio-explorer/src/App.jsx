@@ -14,14 +14,18 @@ function App() {
   const [isMobile, setIsMobile] = useState(false);
   const [selectedNode, setSelectedNode] = useState(data);
 
-  // Listen for folder selection from directory table
   useEffect(() => {
     const handler = (e) => {
       const node = e.detail;
       if (node) {
         setSelectedNode(node);
         setActiveItem("Portfolio");
-        setShowTree(true); // make sure TreeView is open
+        setShowTree(true);
+
+        // Dispatch expand-tree-to-node
+        window.dispatchEvent(
+          new CustomEvent("expand-tree-to-node", { detail: node.name })
+        );
       }
     };
     window.addEventListener("select-directory", handler);
@@ -75,6 +79,10 @@ function App() {
             setSelectedNode(node);
             setActiveItem("Portfolio");
             setShowTree(true);
+
+            window.dispatchEvent(
+              new CustomEvent("expand-tree-to-node", { detail: node.name })
+            );
           }}
         />
         <MainCard node={selectedNode} />

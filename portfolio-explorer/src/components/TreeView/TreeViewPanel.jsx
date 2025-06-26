@@ -13,7 +13,10 @@ import data from "../../data/file-structure.json";
 function TreeViewPanel({ onClose, onSelect }) {
   const [expanded, setExpanded] = useState(true);
   const [selected, setSelected] = useState(data.name);
+  const [expandedMap, setExpandedMap] = useState({});
   const [isPanelVisible, setPanelVisible] = useState(true);
+
+  const root = data;
 
   useEffect(() => {
     const handler = (e) => {
@@ -22,12 +25,28 @@ function TreeViewPanel({ onClose, onSelect }) {
         setSelected(node.name);
       }
     };
-
     window.addEventListener("select-directory", handler);
-    return () => window.removeEventListener("select-directory", handler);
-  }, []);
 
-  const root = data;
+    const expandToNodeHandler = (e) => {
+      const targetName = e.detail;
+      if (!targetName) return;
+
+      const path = findPathToNode(root, targetName);
+      if (path) {
+        const newMap = {};
+        path.forEach((node) => {
+          newMap[node.name] = true;
+        });
+        setExpandedMap(newMap);
+      }
+    };
+
+    window.addEventListener("expand-tree-to-node", expandToNodeHandler);
+    return () => {
+      window.removeEventListener("select-directory", handler);
+      window.removeEventListener("expand-tree-to-node", expandToNodeHandler);
+    };
+  }, []);
 
   const findNodeByName = (node, name) => {
     if (node.name === name) return node;
@@ -35,6 +54,16 @@ function TreeViewPanel({ onClose, onSelect }) {
     for (const child of node.children) {
       const found = findNodeByName(child, name);
       if (found) return found;
+    }
+    return null;
+  };
+
+  const findPathToNode = (node, name, path = []) => {
+    if (node.name === name) return [...path, node];
+    if (!node.children) return null;
+    for (const child of node.children) {
+      const result = findPathToNode(child, name, [...path, node]);
+      if (result) return result;
     }
     return null;
   };
@@ -64,17 +93,11 @@ function TreeViewPanel({ onClose, onSelect }) {
     }
   };
 
-  const handleToggleExpand = () => {
-    setExpanded((prev) => !prev);
-  };
-
-  const togglePanel = () => {
-    setPanelVisible(!isPanelVisible);
-  };
+  const handleToggleExpand = () => setExpanded((prev) => !prev);
+  const togglePanel = () => setPanelVisible(!isPanelVisible);
 
   return (
     <aside className="w-[361px] h-screen bg-card-bg overflow-y-auto px-4 pt-10 z-10 relative shadow-[2px_0_16px_rgba(0,0,0,0.25)] hidden lg:block">
-      {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-[24px] font-semibold text-text ml-4">Portfolio</h2>
         <img
@@ -88,9 +111,7 @@ function TreeViewPanel({ onClose, onSelect }) {
         />
       </div>
 
-      {/* Tree Container */}
       <div className="w-[329px] rounded-[16px] border border-border bg-card-bg px-3 py-4 mx-auto">
-        {/* Root Node */}
         <div
           className={`flex items-center justify-between w-full h-12 rounded-[32px] px-3 mb-6 transition-all duration-300 cursor-pointer ${
             selected === root.name
@@ -116,7 +137,6 @@ function TreeViewPanel({ onClose, onSelect }) {
           />
         </div>
 
-        {/* Children Tree Items */}
         {expanded && (
           <div className="ml-2">
             {root.children.map((child, idx) => (
@@ -127,12 +147,12 @@ function TreeViewPanel({ onClose, onSelect }) {
                 getIconByType={getIconByType}
                 selected={selected}
                 onSelect={handleSelect}
+                expandedMap={expandedMap}
               />
             ))}
           </div>
         )}
 
-        {/* Button */}
         <div className="flex justify-center mt-16">
           <button className="w-[100%] h-[56px] rounded-[32px] bg-focus text-primary cursor-pointer text-[20px] font-medium shadow-[0_2px_16px_rgba(0,0,0,0.25)] hover:bg-primary hover:text-white transition-all duration-200">
             Add More

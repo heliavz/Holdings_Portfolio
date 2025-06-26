@@ -1,15 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PlusIcon from "../../assets/Plus.png";
 import MinusIcon from "../../assets/Minus.png";
 
-function TreeItem({ node, level, getIconByType, selected, onSelect }) {
+function TreeItem({
+  node,
+  level,
+  getIconByType,
+  selected,
+  onSelect,
+  expandedMap = {},
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
   const hasChildren = node.children && node.children.length > 0;
-
-  // Margin: 24px if new group (entity -> investment), else 16px
-  const verticalSpacing = level > 1 ? "mt-4" : "mt-6";
-
   const isSelected = selected === node.name;
+
+  useEffect(() => {
+    if (expandedMap[node.name]) {
+      setIsExpanded(true);
+    }
+  }, [expandedMap, node.name]);
+
+  const verticalSpacing = level > 1 ? "mt-4" : "mt-6";
 
   return (
     <div className={`${verticalSpacing}`}>
@@ -23,7 +34,6 @@ function TreeItem({ node, level, getIconByType, selected, onSelect }) {
         }`}
         style={{ marginLeft: `${level * 16}px`, cursor: "pointer" }}
       >
-        {/* Toggle Icon */}
         {hasChildren ? (
           <img
             src={isExpanded ? MinusIcon : PlusIcon}
@@ -34,21 +44,18 @@ function TreeItem({ node, level, getIconByType, selected, onSelect }) {
           <div className="w-5 h-5" />
         )}
 
-        {/* Circle + Icon + Label */}
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 bg-icon-bg rounded-full flex items-center justify-center">
             <img
               src={getIconByType(node.type)}
               alt={`${node.type} icon`}
-              className="w-4 h-4 hover:scale-110 transition-transform duration-200
-"
+              className="w-4 h-4 hover:scale-110 transition-transform duration-200"
             />
           </div>
           <span className="text-[16px] font-medium text-text">{node.name}</span>
         </div>
       </div>
 
-      {/* Children */}
       {isExpanded && hasChildren && (
         <div className="mt-1">
           {node.children.map((child, index) => (
@@ -59,6 +66,7 @@ function TreeItem({ node, level, getIconByType, selected, onSelect }) {
               getIconByType={getIconByType}
               selected={selected}
               onSelect={onSelect}
+              expandedMap={expandedMap}
             />
           ))}
         </div>

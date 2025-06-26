@@ -72,6 +72,15 @@ function MainCard({ node }) {
 
   const files = collectAllFiles(node, node);
 
+  const triggerNavigation = (targetNode) => {
+    window.dispatchEvent(
+      new CustomEvent("select-directory", { detail: targetNode })
+    );
+    window.dispatchEvent(
+      new CustomEvent("expand-tree-to-node", { detail: targetNode })
+    );
+  };
+
   return (
     <div
       key={fadeKey}
@@ -98,54 +107,29 @@ function MainCard({ node }) {
       </p>
 
       {type === "entity" && (
-        <EntityTable
-          entities={entities}
-          onSelectNode={(node) =>
-            window.dispatchEvent(
-              new CustomEvent("select-directory", { detail: node })
-            )
-          }
-        />
+        <EntityTable entities={entities} onSelectNode={triggerNavigation} />
       )}
 
       {type === "entity" && investments.length > 0 && (
         <InvestmentTable
           investments={investments}
-          onSelectNode={(node) =>
-            window.dispatchEvent(
-              new CustomEvent("select-directory", { detail: node })
-            )
-          }
+          onSelectNode={triggerNavigation}
         />
       )}
 
       {directories.length > 0 && (
         <DirectoryTable
           directories={directories}
-          onSelectNode={(node) =>
-            window.dispatchEvent(
-              new CustomEvent("select-directory", { detail: node })
-            )
-          }
+          onSelectNode={triggerNavigation}
         />
       )}
 
       {type !== "file" && (
         <FilesTable
           files={files}
-          onNavigateToDirectory={(dirNode) => {
-            if (dirNode) {
-              window.dispatchEvent(
-                new CustomEvent("select-directory", { detail: dirNode })
-              );
-            }
-          }}
+          onNavigateToDirectory={triggerNavigation}
           onTriggerToast={showToast}
-          onSelectNode={(node) =>
-            window.dispatchEvent(
-              new CustomEvent("select-directory", { detail: node })
-            )
-          }
+          onSelectNode={triggerNavigation}
         />
       )}
 
