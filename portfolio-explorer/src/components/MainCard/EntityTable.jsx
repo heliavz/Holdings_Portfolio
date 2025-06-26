@@ -22,7 +22,7 @@ function EntityTable({ entities = [], onSelectNode }) {
           <div className="flex items-center gap-1">
             <img src={NameIcon} alt="Name" className="w-4 h-4" /> Name
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 ml-2">
             <img src={StatusIcon} alt="Status" className="w-4 h-4" /> Status
           </div>
           <div className="flex items-center gap-1">
@@ -40,8 +40,7 @@ function EntityTable({ entities = [], onSelectNode }) {
             Modified
           </div>
           <div className="flex items-center gap-1">
-            <img src={ActionsIcon} alt="Actions" className="w-4 h-4" />
-            Actions
+            <img src={ActionsIcon} alt="Actions" className="w-4 h-4" /> Actions
           </div>
         </div>
         {entities.map((e, idx) => (
@@ -55,7 +54,7 @@ function EntityTable({ entities = [], onSelectNode }) {
             >
               {e.name}
             </div>
-            <div>
+            <div className="ml-2">
               <StatusTag status={e.status} />
             </div>
             <div>{e.owner}</div>
